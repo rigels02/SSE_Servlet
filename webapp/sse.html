@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>SSE example</title>
+</head>
+<body>
+<h1>Hello SSE</h1>
+<div id="sse"></div>
+
+<script>
+    var source = new EventSource('sse');
+    source.onmessage = function(e) {
+        document.getElementById('sse').innerHTML+= e.data + '<br>';
+        //source.close();
+    };
+
+    source.addEventListener('error', function(e) {
+    	  if (e.readyState == EventSource.CLOSED) {
+    	    // Connection was closed.
+      	    console.log("Connection was closed.");
+    	  }
+    	}, false);
+  </script>
+</body>
+</html>
