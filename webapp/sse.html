@@ -6,15 +6,35 @@
 </head>
 <body>
 <h1>Hello SSE</h1>
-<div id="sse"></div>
-
+<div id="sse" style="margin:5px; border: 1px; border-style:solid; height: 70px; overflow-y: scroll;"></div>
+<div id="info"  style="margin:5px; border: 1px; border-style:solid; height: 70px; overflow-y: scroll;"></div>
+<div id="json"  style="margin:5px; border: 1px; border-style:solid; height: 70px; overflow-y: scroll;"></div>
 <script>
     var source = new EventSource('sse');
     source.onmessage = function(e) {
-        document.getElementById('sse').innerHTML+= e.data + '<br>';
+        var messageDiv = document.getElementById('sse');
+        messageDiv.innerHTML+= e.data + '<br>';
+        messageDiv.scrollTop= messageDiv.scrollHeight;
         //source.close();
     };
 
+    source.addEventListener('info',function(e){
+        console.log(e.data);
+		var infoDiv = document.getElementById('info');
+		infoDiv.innerHTML+= e.data + '<br>';
+		infoDiv.scrollTop= infoDiv.scrollHeight;
+        });
+
+    source.addEventListener('json',function(e){
+        console.log(e.data);
+        var dobj = JSON.parse(e.data);
+        console.log(dobj);
+        console.log(dobj.name);
+		var infoDiv = document.getElementById('json');
+		infoDiv.innerHTML+= e.data + '<br>';
+		infoDiv.scrollTop= infoDiv.scrollHeight;
+        });
+    
     source.addEventListener('error', function(e) {
     	  if (e.readyState == EventSource.CLOSED) {
     	    // Connection was closed.
